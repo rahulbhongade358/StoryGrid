@@ -1,8 +1,8 @@
 import User from "./../models/User.js";
 
 const postSingup= async(req,res)=>{
-    const {username,email,password}=req.body;
-    if(!username,!email,!password){
+    const {name,email,password}=req.body;
+    if(!name,!email,!password){
         return res.json({
             success:false,
             message:"All fields are required"
@@ -12,10 +12,10 @@ const postSingup= async(req,res)=>{
     const nameValidationRegex=/^[a-zA-Z ]+$/;
     const passwordValidationRegex= /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
-    if(nameValidationRegex.test(username)===false){
+    if(nameValidationRegex.test(name)===false){
         return res.json({
             success:false,
-            message:"Username Should only contain alphabets"
+            message:"Name Should only contain alphabets"
         })
     }
     if(emailValidationRegex.test(email)===false){
@@ -38,7 +38,7 @@ const postSingup= async(req,res)=>{
             message:`User with email: ${email} has already registered`
         })
     }
-    const newuser= new User({username,email,password})
+    const newuser= new User({name,email,password})
 
     const savedUser= await newuser.save();
     res.json({
