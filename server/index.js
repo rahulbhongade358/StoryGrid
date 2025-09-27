@@ -3,7 +3,7 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dotenv from "dotenv";
 import { postLogin, postSingup } from "./controllers/user.js";
-import {postBlog} from "./controllers/blog.js"
+import {getBlog, postBlog} from "./controllers/blog.js"
 dotenv.config();
 
 const app = express();
@@ -29,6 +29,7 @@ app.get("/health",(req,res)=>{
 app.post("/singup",postSingup);
 app.post("/login",postLogin);
 app.post("/addblogs",postBlog);
+app.get("/blogs",getBlog)
 const PORT = process.env.PORT || 8080;
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);

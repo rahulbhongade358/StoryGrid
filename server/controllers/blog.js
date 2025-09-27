@@ -20,4 +20,13 @@ const postBlog = async(req,res)=>{
         message:"Your Blog is saved for Publishied"
     })
 }
-export {postBlog}
+const getBlog = async(req,res)=>{
+    const blogs= await Blog.find().populate("author","_id name email");
+
+    res.status(200).json({
+        success:true,
+        data:blogs,
+        message:"Blogs fetched Successfully"
+    })
+}
+export {postBlog,getBlog}
