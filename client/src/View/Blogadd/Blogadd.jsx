@@ -23,12 +23,9 @@ function Blogadd() {
     if (response?.data?.success) {
       toast.success(response.data.message);
     }
-    console.log(response?.data?.success);
-    console.log(response.data.message);
-    setTimeout(() => {
-      window.location.href = "/bloglist";
-    }, 2000);
-    ``;
+    // setTimeout(() => {
+    //   window.location.href = "/bloglist";
+    // }, 2000);
   };
   useEffect(() => {
     document.documentElement.setAttribute("data-color-mode", "light");

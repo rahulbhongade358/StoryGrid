@@ -10,9 +10,10 @@ const postBlog = async(req,res)=>{
         })
     }
 
-    const newBlog = new Blog({title,content,category,author})
+    const newBlog = new Blog({title,content,category,author,slug:`Temp-Slug-${Date.now()}-${Math.random().toString()}`})
     const savedBlog = await newBlog.save()
-
+    savedBlog.slug = `${ title.toLowerCase().replace(/ /g, "-")}-${savedBlog._id}`.replace(/[^\w-]+/g,"");
+    await savedBlog.save()
     res.status(201).json({
         success:true,
         data:savedBlog,
