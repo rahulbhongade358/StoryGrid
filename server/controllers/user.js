@@ -1,5 +1,5 @@
 import User from "./../models/User.js";
-
+import md5 from "md5"
 const postSingup= async(req,res)=>{
     const {name,email,password}=req.body;
     if(!name,!email,!password){
@@ -38,7 +38,7 @@ const postSingup= async(req,res)=>{
             message:`User with email: ${email} has already registered`
         })
     }
-    const newuser= new User({name,email,password})
+    const newuser= new User({name,email,password: md5(password)})
 
     const savedUser= await newuser.save();
     res.json({
@@ -56,7 +56,7 @@ const postLogin=async(req,res)=>{
             message:"All fields are required",
         })
     }
-    const existingUser= await User.findOne({email,password});
+    const existingUser= await User.findOne({email,password: md5(password) }).select(" _id name email ")
     if(existingUser){
         res.json({
             success:true,

@@ -20,6 +20,9 @@ function Signup() {
       } else {
         toast.success(response.data.message);
       }
+      setTimeout(() => {
+        window.location.href = "/login";
+      }, 2000);
     } catch (error) {
       console.error(
         "Error adding user:",

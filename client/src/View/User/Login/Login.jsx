@@ -9,11 +9,11 @@ function Login() {
     password: "",
   });
   const Login = async () => {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/login`,
+      loginUser
+    );
     try {
-      const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/login`,
-        loginUser
-      );
       if (response.data.success === false) {
         toast.error(response.data.message);
       } else {
@@ -27,6 +27,10 @@ function Login() {
         "Error adding user:",
         error.response?.data || error.message
       );
+    }
+
+    if (response?.data?.success) {
+      localStorage.setItem("userlogin", JSON.stringify(response.data.user));
     }
   };
   return (
