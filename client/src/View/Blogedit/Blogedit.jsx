@@ -1,36 +1,118 @@
 import React from "react";
-
+import axios from "axios";
+import MarkdownEditor from "@uiw/react-markdown-editor";
+import { useEffect, useState } from "react";
+import { BLOG_CATEGORIES } from "./../../Constants/constants.js";
+import { getCurrentuser } from "../../utils/utils.js";
+import toast, { Toaster } from "react-hot-toast";
+import { useParams } from "react-router";
 function Blogedit() {
+  const [user, setUser] = useState(null);
+  const [title, setTitle] = useState("");
+  const [content, setContent] = useState("");
+  const [category, setCategory] = useState(BLOG_CATEGORIES[0]);
+  const { slug } = useParams();
+  const loadBlog = async () => {
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/blogs/${slug}`
+    );
+    const blogdata = response?.data?.data;
+
+    setTitle(blogdata?.title);
+    setContent(blogdata?.content);
+    setCategory(blogdata?.category);
+  };
+  const updateBlog = async () => {
+    const response = await axios.post(
+      `${import.meta.env.VITE_API_URL}/addblogs`,
+      {
+        title,
+        content,
+        category,
+        author: user?._id,
+      }
+    );
+    if (response?.data?.success) {
+      toast.success(response.data.message);
+    }
+    setTimeout(() => {
+      window.location.href = "/bloglist";
+    }, 2000);
+  };
+  const publishBlog = async () => {
+    const response = await axios.patch(
+      `${import.meta.env.VITE_API_URL}/blogs/${slug}/publish`
+    );
+    if (response?.data?.success) {
+      toast.success(response.data.message);
+      setTimeout(() => {
+        window.location.href = "/bloglist";
+      }, 2000);
+    }
+  };
+  useEffect(() => {
+    document.documentElement.setAttribute("data-color-mode", "light");
+    setUser(getCurrentuser());
+    loadBlog();
+  }, []);
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-100 via-white to-indigo-100">
-      <div className="w-full max-w-lg p-8 bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl">
-        <h1 className="text-3xl font-extrabold text-center text-gray-800 mb-6">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-pink-100 via-white to-indigo-100 p-6">
+      <div className="w-full max-w-4xl bg-white/80 backdrop-blur-lg rounded-2xl shadow-xl p-8">
+        <h1 className="text-4xl font-extrabold text-center text-indigo-700 mb-6">
           Edit Blog
         </h1>
-        <form className="space-y-4">
-          <input
-            type="text"
-            placeholder="Blog Title"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-          <textarea
-            placeholder="Blog Content"
-            rows={8}
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
-          <input
-            type="text"
-            placeholder="Category"
-            className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
-          />
+        <p className="text-center text-gray-500 mb-6">
+          Write your blog content below and share your thoughts with the
+          community.
+        </p>
+        <input
+          type="text"
+          placeholder="Blog Title"
+          className="border p-2 w-full my-4 rounded-md"
+          value={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
+        <select
+          className="border p-2 my-4 "
+          value={category}
+          onChange={(e) => {
+            setCategory(e.target.value);
+          }}
+        >
+          {BLOG_CATEGORIES.map((cate) => {
+            return (
+              <option value={cate} key={cate}>
+                {" "}
+                {cate}
+              </option>
+            );
+          })}
+        </select>
+        <MarkdownEditor
+          value={content}
+          onChange={(value) => {
+            setContent(value);
+          }}
+          height="350px"
+        />
+        <div className="flex justify-end mt-6 gap-6">
           <button
-            type="submit"
-            className="w-full bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200"
+            className="bg-green-600 text-white px-6 py-2  rounded-lg font-semibold hover:bg-indigo-700 transition duration-200"
+            onClick={publishBlog}
           >
-            Save Changes
+            Publish Blog
           </button>
-        </form>
+          <button
+            className="bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200"
+            onClick={updateBlog}
+          >
+            Update Blog
+          </button>
+        </div>
       </div>
+      <Toaster />
     </div>
   );
 }
