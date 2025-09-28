@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { getCurrentuser } from "../../utils/utils.js";
 import { Link } from "react-router";
 import axios from "axios";
+import Blogcards from "../../Components/Blogcards.jsx";
 
 function Bloglist() {
   const [logginUser, setLogginUser] = useState(null);
@@ -58,20 +59,37 @@ function Bloglist() {
             Explore all published stories from our community.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            <div className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition flex flex-col justify-between">
-              <div>
-                <h2 className="text-2xl font-bold text-indigo-700 mb-2">
-                  {allblogs.title}
-                </h2>
-                <p className="text-gray-600 mb-4">{allblogs.content}</p>
-              </div>
-              <div className="flex justify-between items-center mt-4">
-                <span className="text-sm text-gray-400">{allblogs.author}</span>
-                <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200">
-                  Read More
-                </button>
-              </div>
-            </div>
+            {allblogs.map((blog) => {
+              const {
+                _id,
+                title,
+                content,
+                status,
+                category,
+                author,
+                slug,
+                createdAt,
+                updatedAt,
+              } = blog;
+              return (
+                <div
+                  key={_id}
+                  className="bg-white rounded-xl shadow-md p-6 hover:shadow-lg transition flex flex-col justify-between"
+                >
+                  <Blogcards
+                    _id={_id}
+                    title={title}
+                    content={content}
+                    category={category}
+                    status={status}
+                    author={author}
+                    slug={slug}
+                    createdAt={createdAt}
+                    updatedAt={updatedAt}
+                  />
+                </div>
+              );
+            })}
           </div>
         </div>
       </div>

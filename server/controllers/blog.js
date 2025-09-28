@@ -29,4 +29,19 @@ const getBlog = async(req,res)=>{
         message:"Blogs fetched Successfully"
     })
 }
-export {postBlog,getBlog}
+const getBlogForSlug=async(req,res)=>{
+    const {slug} = req.params
+    const blog = await Blog.findOne({slug:slug}).populate("author","_id name email");
+    if (!blog) {
+        return res.status(404).json({
+            success:false,
+            message:"Blog not found "
+        })        
+    }
+    res.status(201).json({
+        success:true,
+        data:blog,
+        message:"Blog Fetched Successfully"
+    })
+}
+export {postBlog,getBlog,getBlogForSlug}
