@@ -9,15 +9,19 @@ function Bloglist() {
   const [logginUser, setLogginUser] = useState(null);
   const [allblogs, setAllblogs] = useState([]);
   const blogs = async () => {
-    const response = await axios.get(`${import.meta.env.VITE_API_URL}/blogs`);
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_URL}/blogs?author=${logginUser?._id || ""}`
+    );
     setAllblogs(response.data.data);
-    console.log(response.data.data);
   };
-  console.log(allblogs);
   useEffect(() => {
     setLogginUser(getCurrentuser());
-    blogs();
   }, []);
+
+  useEffect(() => {
+    blogs();
+  }, [logginUser]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-white to-indigo-100">
       <nav className="bg-indigo-700 text-white px-8 py-4 flex items-center justify-between shadow-md">

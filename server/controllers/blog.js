@@ -21,7 +21,17 @@ const postBlog = async(req,res)=>{
     })
 }
 const getBlog = async(req,res)=>{
-    const blogs= await Blog.find().populate("author","_id name email");
+    const {author}=req.query
+    const conditions = [{status:"PUBLISHED"}]
+    if (author) {
+        conditions.push({author:author})
+    }
+    const blogs= await Blog.find({$or:conditions}).populate("author","_id name email").sort(
+        {
+            status: 1,
+      updatedAt: -1,
+        }
+    );
 
     res.status(200).json({
         success:true,

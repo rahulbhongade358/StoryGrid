@@ -25,14 +25,26 @@ function Blogcards({
         <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded">
           {category}
         </span>
-        <span className="text-xs text-gray-400">{status}</span>
+        {status != "PUBLISHED" ? (
+          <span className="text-xs text-gray-400">{status}</span>
+        ) : null}
       </div>
-      <Link
-        className="mt-4 bg-indigo-600 text-white w-fit px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200"
-        to={`/blogdetails/${slug}`}
-      >
-        Read More
-      </Link>
+
+      {status == "PUBLISHED" ? (
+        <Link
+          className="mt-4 bg-indigo-600 text-white w-fit px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200"
+          to={`/blogdetails/${slug}`}
+        >
+          Read More
+        </Link>
+      ) : (
+        <Link
+          className="mt-4 bg-indigo-600 text-white w-fit px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200"
+          to={`/blogedit/${slug}`}
+        >
+          Edit Blog
+        </Link>
+      )}
     </>
   );
 }
