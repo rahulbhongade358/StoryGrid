@@ -63,4 +63,20 @@ const patchPublishBlog=async(req,res)=>{
         message:"Blog Published Successfully"
     })
 }
-export {postBlog,getBlog,getBlogForSlug ,patchPublishBlog}
+const putBlog=async(req,res)=>{
+    const {slug} = req.params
+    const { title, content,category}=req.body
+    if( !title || !content || !category){
+        return res.status(400).json({
+            success:false,
+            message:"All fields are required "
+        })
+    }
+    const updateBlog = await Blog.findOneAndUpdate({slug:slug}, {  title, content,category,})
+     return res.status(200).json({
+    success: true,
+    message: "Blog updated successfully",
+    blog: updateBlog,
+  });
+}
+export {postBlog,getBlog,getBlogForSlug ,patchPublishBlog,putBlog}

@@ -18,8 +18,8 @@ function Blogdetails() {
     document.documentElement.setAttribute("data-color-mode", "light");
   }, []);
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-100 via-white to-indigo-100">
-      <div className="w-full max-w-2xl p-8 bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl absolute">
+    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-pink-100 via-white to-indigo-100 overflow-y-auto p-4">
+      <div className="w-full max-w-3xl p-8 bg-white/90 backdrop-blur-lg rounded-2xl shadow-xl">
         <h1 className="text-4xl font-extrabold text-center text-indigo-700 mb-4">
           {blog.title}
         </h1>
@@ -54,14 +54,12 @@ function Blogdetails() {
         <div className="mt-8">
           <h2 className="text-xl font-bold text-gray-700 mb-2">Comments</h2>
           <div className="space-y-4">
-            {/* Example comment */}
             <div className="bg-gray-100 rounded-lg p-4">
               <span className="font-semibold text-indigo-600">User Name</span>
               <p className="text-gray-700 mt-1">
                 Great story! Really enjoyed reading it.
               </p>
             </div>
-            {/* Repeat comments as needed */}
           </div>
         </div>
       </div>
