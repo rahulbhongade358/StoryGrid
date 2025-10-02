@@ -4,6 +4,7 @@ import { getCurrentuser } from "../../utils/utils.js";
 import { Link } from "react-router";
 import axios from "axios";
 import Blogcards from "../../Components/Blogcards.jsx";
+import Navbar from "../../Components/Navbar.jsx";
 
 function Bloglist() {
   const [logginUser, setLogginUser] = useState(null);
@@ -24,36 +25,7 @@ function Bloglist() {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-white to-indigo-100">
-      <nav className="bg-indigo-700 text-white px-8 py-4 flex items-center justify-between shadow-md">
-        <div className="text-2xl font-bold">StoryGrid</div>
-        <ul className="hidden md:flex space-x-6 font-medium">
-          <Link to="/bloglist" className="hover:text-gray-200 cursor-pointer">
-            Blogs
-          </Link>
-          <Link to="/blogadd" className="hover:text-gray-200 cursor-pointer">
-            Add-Blog
-          </Link>
-          <Link
-            to="/blogedit/:id"
-            className="hover:text-gray-200 cursor-pointer"
-          >
-            Edit-Blog
-          </Link>
-          <Link to="/login" className="hover:text-gray-200 cursor-pointer">
-            Login
-          </Link>
-          <Link to="/signup" className="hover:text-gray-200 cursor-pointer">
-            Signup
-          </Link>
-        </ul>
-        <div className="flex items-center space-x-4">
-          {logginUser ? (
-            <>
-              <span className="font-semibold">Hi, {logginUser.name}</span>
-            </>
-          ) : null}
-        </div>
-      </nav>
+      <Navbar />
       <div className="flex items-center justify-center min-h-screen mt-5">
         <div className="w-full max-w-5xl p-8 bg-white/70 backdrop-blur-lg rounded-2xl shadow-xl">
           <h1 className="text-4xl font-extrabold text-center text-gray-800 mb-6">
