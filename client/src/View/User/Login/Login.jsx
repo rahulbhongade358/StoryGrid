@@ -31,6 +31,7 @@ function Login() {
 
     if (response?.data?.success) {
       localStorage.setItem("userlogin", JSON.stringify(response.data.user));
+      localStorage.setItem("token", response.data.token);
     }
   };
   return (

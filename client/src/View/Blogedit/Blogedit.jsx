@@ -23,30 +23,48 @@ function Blogedit() {
     setCategory(blogdata?.category);
   };
   const updateBlog = async () => {
-    const response = await axios.put(
-      `${import.meta.env.VITE_API_URL}/blogs/${slug}`,
-      {
-        title,
-        content,
-        category,
+    try {
+      const response = await axios.put(
+        `${import.meta.env.VITE_API_URL}/blogs/${slug}`,
+        {
+          title,
+          content,
+          category,
+        },
+        {
+          headers: {
+            Authorization: ` Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response?.data?.success) {
+        toast.success(response.data.message);
+        setTimeout(() => {
+          window.location.href = "/bloglist";
+        }, 2000);
       }
-    );
-    if (response?.data?.success) {
-      toast.success(response.data.message);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Error Updating Blog");
     }
-    setTimeout(() => {
-      window.location.href = "/bloglist";
-    }, 2000);
   };
   const publishBlog = async () => {
-    const response = await axios.patch(
-      `${import.meta.env.VITE_API_URL}/blogs/${slug}/publish`
-    );
-    if (response?.data?.success) {
-      toast.success(response.data.message);
-      setTimeout(() => {
-        window.location.href = "/bloglist";
-      }, 2000);
+    try {
+      const response = await axios.patch(
+        `${import.meta.env.VITE_API_URL}/blogs/${slug}/publish`,
+        {
+          headers: {
+            Authorization: ` Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response?.data?.success) {
+        toast.success(response.data.message);
+        setTimeout(() => {
+          window.location.href = "/bloglist";
+        }, 2000);
+      }
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Error Publishing Blog");
     }
   };
   useEffect(() => {

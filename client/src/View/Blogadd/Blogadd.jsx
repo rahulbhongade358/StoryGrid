@@ -11,21 +11,30 @@ function Blogadd() {
   const [content, setContent] = useState("");
   const [category, setCategory] = useState(BLOG_CATEGORIES[0]);
   const saveBlog = async () => {
-    const response = await axios.post(
-      `${import.meta.env.VITE_API_URL}/addblogs`,
-      {
-        title,
-        content,
-        category,
-        author: user?._id,
+    try {
+      const response = await axios.post(
+        `${import.meta.env.VITE_API_URL}/addblogs`,
+        {
+          title,
+          content,
+          category,
+          author: user?._id,
+        },
+        {
+          headers: {
+            Authorization: ` Bearer ${localStorage.getItem("token")}`,
+          },
+        }
+      );
+      if (response?.data?.success) {
+        toast.success(response.data.message);
       }
-    );
-    if (response?.data?.success) {
-      toast.success(response.data.message);
+      setTimeout(() => {
+        window.location.href = "/bloglist";
+      }, 2000);
+    } catch (error) {
+      toast.error(error?.response?.data?.message || "Error Publishing Blog");
     }
-    setTimeout(() => {
-      window.location.href = "/bloglist";
-    }, 2000);
   };
   useEffect(() => {
     document.documentElement.setAttribute("data-color-mode", "light");
