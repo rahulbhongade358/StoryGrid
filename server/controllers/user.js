@@ -1,5 +1,6 @@
 import User from "./../models/User.js";
 import md5 from "md5"
+import JWT from "jsonwebtoken"
 const postSingup= async(req,res)=>{
     const {name,email,password}=req.body;
     if(!name,!email,!password){
@@ -58,10 +59,18 @@ const postLogin=async(req,res)=>{
     }
     const existingUser= await User.findOne({email,password: md5(password) }).select(" _id name email ")
     if(existingUser){
+
+        const token = JWT.sign({
+            _id:existingUser._id, email:existingUser.email, name:existingUser.name
+        },
+            process.env.JWT_SECERT,
+        {expiresIn:"1d"}
+    )
+
         res.json({
             success:true,
             message:"Login Successful",
-            user:existingUser
+            user:existingUser,token
         })
     }else{
         res.json({

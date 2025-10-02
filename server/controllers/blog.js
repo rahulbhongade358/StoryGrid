@@ -1,16 +1,18 @@
+import JWT from "jsonwebtoken";
 import Blog from "./../models/Blog.js"
 
 const postBlog = async(req,res)=>{
-    const {title,content,category,author}=req.body
-
-    if(!title,!content,!category,!author){
+    const {title,content,category}=req.body
+   const {decodedUser}=req
+   console.log(decodedUser)
+    if(!title,!content,!category){
         return res.json({
             success:false,
             message:"All fields are required"
         })
     }
 
-    const newBlog = new Blog({title,content,category,author,slug:`Temp-Slug-${Date.now()}-${Math.random().toString()}`})
+    const newBlog = new Blog({title,content,category,author:decodedUser?._id,slug:`Temp-Slug-${Date.now()}-${Math.random().toString()}`})
     const savedBlog = await newBlog.save()
     savedBlog.slug = `${ title.toLowerCase().replace(/ /g, "-")}-${savedBlog._id}`.replace(/[^\w-]+/g,"");
     await savedBlog.save()
@@ -56,6 +58,22 @@ const getBlogForSlug=async(req,res)=>{
 }
 const patchPublishBlog=async(req,res)=>{
     const {slug}=req.params
+    const {decodedUser}=req
+
+    const blog = await Blog.findOne({slug:slug})
+    if (!blog) {
+        return res.status(401).json({
+            success:false,
+            message:"Blog NOt Found"
+        })
+    }
+
+    if (blog.author.toString()!==decodedUser?._id){
+        return res.status(403).json({
+            success:false,
+            message:"You are not authorized to publish this blog"
+        })
+    }
     const publishedBlogs= await Blog.findOneAndUpdate({slug:slug},{status:"PUBLISHED"});
     res.status(201).json({
         success:true,
@@ -66,6 +84,24 @@ const patchPublishBlog=async(req,res)=>{
 const putBlog=async(req,res)=>{
     const {slug} = req.params
     const { title, content,category}=req.body
+    const {decodedUser}=req;
+    
+    
+
+    const existingBlog = await Blog.findOne({slug:slug})
+    if(!existingBlog){
+        return res.status(404).json({
+            success:false,
+            message:"Blog not Found"
+        })
+    }
+    if (existingBlog.author.toString() !== decodedUser._id) {
+        return res.status(403).json({
+            success:false,
+            message:"You are not eligable to update this blog"
+        })
+    }
+
     if( !title || !content || !category){
         return res.status(400).json({
             success:false,

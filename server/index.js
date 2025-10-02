@@ -4,6 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { postLogin, postSingup } from "./controllers/user.js";
 import {getBlog, postBlog, getBlogForSlug, patchPublishBlog,putBlog} from "./controllers/blog.js"
+import JWT from "jsonwebtoken";
 dotenv.config();
 
 const app = express();
@@ -26,13 +27,36 @@ app.get("/health",(req,res)=>{
         message:"Server is healthy"
     })
 })
+
+const JWTcheck = (req,res,next)=>{
+    req.decodedUser=null
+    const {authorization}=req.headers;
+    if(!authorization){
+        return res.status(400).json({
+            message:"Authorization Token Missing"
+        })
+    }
+
+    try {
+        const token = authorization.split(" ")[1];
+        const decoded = JWT.verify(token, process.env.JWT_SECERT)
+        req.decodedUser= decoded
+        next()
+    } catch (err) {
+        return res.status(401).json({
+            success:false,
+            message:"Invalid Jwt Token"
+        })
+    }
+}
+
 app.post("/singup",postSingup);
 app.post("/login",postLogin);
-app.post("/addblogs",postBlog);
+app.post("/addblogs",JWTcheck,postBlog);
 app.get("/blogs",getBlog)
 app.get("/blogs/:slug",getBlogForSlug)
-app.patch("/blogs/:slug/publish",patchPublishBlog)
-app.put("/blogs/:slug",putBlog)
+app.patch("/blogs/:slug/publish",JWTcheck,patchPublishBlog)
+app.put("/blogs/:slug",JWTcheck,putBlog)
 const PORT = process.env.PORT || 8080;
 app.listen(PORT,()=>{
     console.log(`Server is running on port ${PORT}`);
