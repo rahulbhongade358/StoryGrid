@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router";
 function Blogcards({
-  _id,
   title,
   content,
   status,
@@ -9,7 +8,7 @@ function Blogcards({
   author,
   slug,
   createdAt,
-  updatedAt,
+  viewCount,
 }) {
   return (
     <>
@@ -31,12 +30,18 @@ function Blogcards({
       </div>
 
       {status == "PUBLISHED" ? (
-        <Link
-          className="mt-4 bg-indigo-600 text-white w-fit px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200"
-          to={`/blogdetails/${slug}`}
-        >
-          Read More
-        </Link>
+        <div className="flex items-center gap-4 mt-4">
+          <Link
+            className="bg-indigo-600 text-white w-fit px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200"
+            to={`/blogdetails/${slug}`}
+          >
+            Read More
+          </Link>
+          <span className="text-gray-600 text-sm">
+            👁️ Read By{" "}
+            <span className="font-medium text-gray-800">{viewCount}</span>
+          </span>
+        </div>
       ) : (
         <Link
           className="mt-4 bg-indigo-600 text-white w-fit px-4 py-2 rounded-lg font-semibold hover:bg-indigo-700 transition duration-200"

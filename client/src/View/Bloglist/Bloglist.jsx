@@ -1,7 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import { getCurrentuser } from "../../utils/utils.js";
-import { Link } from "react-router";
 import axios from "axios";
 import Blogcards from "../../Components/Blogcards.jsx";
 import Navbar from "../../Components/Navbar.jsx";
@@ -46,6 +45,7 @@ function Bloglist() {
                 slug,
                 createdAt,
                 updatedAt,
+                viewCount,
               } = blog;
               return (
                 <div
@@ -62,6 +62,7 @@ function Bloglist() {
                     slug={slug}
                     createdAt={createdAt}
                     updatedAt={updatedAt}
+                    viewCount={viewCount}
                   />
                 </div>
               );

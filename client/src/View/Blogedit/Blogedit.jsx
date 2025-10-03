@@ -8,7 +8,6 @@ import toast, { Toaster } from "react-hot-toast";
 import { useParams } from "react-router";
 import Navbar from "../../Components/Navbar.jsx";
 function Blogedit() {
-  const [user, setUser] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [category, setCategory] = useState(BLOG_CATEGORIES[0]);
@@ -23,6 +22,10 @@ function Blogedit() {
     setContent(blogdata?.content);
     setCategory(blogdata?.category);
   };
+  useEffect(() => {
+    document.documentElement.setAttribute("data-color-mode", "light");
+    loadBlog();
+  }, []);
   const updateBlog = async () => {
     try {
       const response = await axios.put(
@@ -52,6 +55,7 @@ function Blogedit() {
     try {
       const response = await axios.patch(
         `${import.meta.env.VITE_API_URL}/blogs/${slug}/publish`,
+        {},
         {
           headers: {
             Authorization: ` Bearer ${localStorage.getItem("token")}`,
@@ -68,11 +72,7 @@ function Blogedit() {
       toast.error(error?.response?.data?.message || "Error Publishing Blog");
     }
   };
-  useEffect(() => {
-    document.documentElement.setAttribute("data-color-mode", "light");
-    setUser(getCurrentuser());
-    loadBlog();
-  }, []);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-pink-100 via-white to-indigo-100">
       <Navbar />

@@ -18,9 +18,6 @@ function Login() {
         toast.error(response.data.message);
       } else {
         toast.success(response.data.message);
-        setTimeout(() => {
-          window.location.href = "/bloglist";
-        }, 2000);
       }
     } catch (error) {
       console.error(
@@ -32,6 +29,9 @@ function Login() {
     if (response?.data?.success) {
       localStorage.setItem("userlogin", JSON.stringify(response.data.user));
       localStorage.setItem("token", response.data.token);
+      setTimeout(() => {
+        window.location.href = "/bloglist";
+      }, 2000);
     }
   };
   return (

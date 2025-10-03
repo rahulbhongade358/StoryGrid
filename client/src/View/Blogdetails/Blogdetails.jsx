@@ -23,13 +23,16 @@ function Blogdetails() {
         <h1 className="text-4xl font-extrabold text-center text-indigo-700 mb-4">
           {blog.title}
         </h1>
-        <div className="flex flex-col sm:flex-row justify-between items-center mb-6 gap-2">
+        <div className="flex flex-row sm:flex-row justify-between items-center mb-6 gap-2">
           <span className="text-gray-500 font-medium">
             Author:{" "}
             <span className="text-indigo-600">{blog?.author?.name}</span>
           </span>
           <span className="text-gray-400 text-sm">
             {new Date(blog.publishedAt || blog.updatedAt).toLocaleString()}
+          </span>
+          <span className="inline-flex items-center gap-1 px-3 py-1 text-sm font-medium text-indigo-700 bg-indigo-100 rounded-full shadow-sm">
+            👁️ {blog.viewCount}
           </span>
         </div>
         <div className="prose prose-lg max-w-none text-gray-800 mb-8">

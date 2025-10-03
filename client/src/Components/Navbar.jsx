@@ -17,22 +17,30 @@ function Navbar() {
         <Link to="/blogadd" className="hover:text-gray-200 cursor-pointer">
           Add-Blog
         </Link>
-        <Link to="/blogedit/:id" className="hover:text-gray-200 cursor-pointer">
-          Edit-Blog
-        </Link>
-        <Link to="/login" className="hover:text-gray-200 cursor-pointer">
-          Login
-        </Link>
-        <Link to="/signup" className="hover:text-gray-200 cursor-pointer">
-          Signup
-        </Link>
       </ul>
       <div className="flex items-center space-x-4">
         {logginUser ? (
           <>
-            <span className="font-semibold">Hi, {logginUser.name}</span>
+            <span className="font-semibold">Welcome {logginUser.name}</span>
           </>
-        ) : null}
+        ) : (
+          <span className="font-semibold">Welcome Guest</span>
+        )}
+        <div>
+          {logginUser ? (
+            <span
+              className="cursor-pointer"
+              onClick={() => {
+                localStorage.clear();
+                window.location.href = "/bloglist";
+              }}
+            >
+              Logout
+            </span>
+          ) : (
+            <Link to="/login">Login</Link>
+          )}
+        </div>
       </div>
     </nav>
   );

@@ -12,15 +12,23 @@ const postBlog = async(req,res)=>{
         })
     }
 
-    const newBlog = new Blog({title,content,category,author:decodedUser?._id,slug:`Temp-Slug-${Date.now()}-${Math.random().toString()}`})
-    const savedBlog = await newBlog.save()
-    savedBlog.slug = `${ title.toLowerCase().replace(/ /g, "-")}-${savedBlog._id}`.replace(/[^\w-]+/g,"");
-    await savedBlog.save()
+    const newBlog = new Blog({
+      title,
+      content,
+      category,
+      author: decodedUser?._id,
+      slug: `Temp-Slug-${Date.now()}-${Math.random().toString()}`,
+    });
+    const savedBlog = await newBlog.save();
+    savedBlog.slug = `${title.toLowerCase().replace(/ /g, "-")}-${
+      savedBlog._id
+    }`.replace(/[^\w-]+/g, "");
+    await savedBlog.save();
     res.status(201).json({
-        success:true,
-        data:savedBlog,
-        message:"Your Blog is saved for Publishied"
-    })
+      success: true,
+      data: savedBlog,
+      message: "Your Blog is saved for Publishied",
+    });
 }
 const getBlog = async(req,res)=>{
     const {author}=req.query
