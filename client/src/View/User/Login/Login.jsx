@@ -13,20 +13,9 @@ function Login() {
       `${import.meta.env.VITE_API_URL}/login`,
       loginUser
     );
-    try {
-      if (response.data.success === false) {
-        toast.error(response.data.message);
-      } else {
-        toast.success(response.data.message);
-      }
-    } catch (error) {
-      console.error(
-        "Error adding user:",
-        error.response?.data || error.message
-      );
-    }
 
     if (response?.data?.success) {
+      toast.success(response.data.message);
       localStorage.setItem("userlogin", JSON.stringify(response.data.user));
       localStorage.setItem("token", response.data.token);
       setTimeout(() => {
